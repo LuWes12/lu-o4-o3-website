@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>OpenAI o3 & o4‑mini Overview</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* 语言切换样式 */
+    .lang-en .zh { display: none; }
+    .lang-zh .en { display: none; }
+  </style>
+</head>
+<body id="app" class="lang-en bg-gray-900 text-white leading-relaxed">
+
+  <!-- 语言切换按钮 -->
+  <div class="fixed top-4 right-4 space-x-2 z-50">
+    <button onclick="toggleLanguage('en')"
+            class="px-3 py-1 bg-blue-600 rounded hover:bg-blue-700 transition">English</button>
+    <button onclick="toggleLanguage('zh')"
+            class="px-3 py-1 bg-green-600 rounded hover:bg-green-700 transition">中文</button>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="relative h-screen flex items-center justify-center text-center overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-purple-800 via-blue-900 to-black opacity-70"></div>
+    <div class="z-10 px-4">
+      <h1 class="text-5xl font-bold mb-4">
+        <span class="en">OpenAI o3 &amp; o4‑mini</span>
+        <span class="zh">OpenAI o3 与 o4‑mini</span>
+      </h1>
+      <p class="text-xl mb-8">
+        <span class="en">Lightweight inference reimagined with powerful reasoning and multimodal support.</span>
+        <span class="zh">轻量级推理，强大推理与多模态支持的全新演绎。</span>
+      </p>
+      <a href="#features" class="inline-block bg-yellow-400 text-black font-semibold px-6 py-3 rounded-lg hover:bg-yellow-500 transition">
+        <span class="en">Learn More</span>
+        <span class="zh">了解详情</span>
+      </a>
+    </div>
+    <canvas id="heroCanvas" class="absolute inset-0"></canvas>
+  </section>
+
+  <!-- Features Comparison -->
+  <section id="features" class="py-16 px-4">
+    <h2 class="text-3xl font-semibold text-center mb-12">
+      <span class="en">Core Feature Comparison</span>
+      <span class="zh">核心特性对比</span>
+    </h2>
+    <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+      <!-- o3 Card -->
+      <div class="bg-gray-800 p-6 rounded-2xl shadow-lg hover:shadow-2xl transition">
+        <h3 class="text-2xl font-bold mb-4">
+          <span class="en">Model o3</span>
+          <span class="zh">模型 o3</span>
+        </h3>
+        <ul class="space-y-2">
+          <li>🧠 <strong><span class="en">Reasoning:</span><span class="zh">推理：</span></strong>
+            <span class="en">Advanced logical inference</span>
+            <span class="zh">高级逻辑推理</span>
+          </li>
+          <li>⚡ <strong><span class="en">Speed:</span><span class="zh">速度：</span></strong>
+            <span class="en">~50ms latency on embed tasks</span>
+            <span class="zh">嵌入任务约50毫秒延迟</span>
+          </li>
+          <li>🔢 <strong><span class="en">Params:</span><span class="zh">参数量：</span></strong>
+            <span class="en">1B</span>
+            <span class="zh">10亿</span>
+          </li>
+          <li>💾 <strong><span class="en">Memory:</span><span class="zh">内存占用：</span></strong>
+            <span class="en">500 MB footprint</span>
+            <span class="zh">500 MB</span>
+          </li>
+        </ul>
+      </div>
+      <!-- o4-mini Card -->
+      <div class="bg-gray-800 p-6 rounded-2xl shadow-lg hover:shadow-2xl transition">
+        <h3 class="text-2xl font-bold mb-4">
+          <span class="en">Model o4‑mini</span>
+          <span class="zh">模型 o4‑mini</span>
+        </h3>
+        <ul class="space-y-2">
+          <li>🧠 <strong><span class="en">Reasoning:</span><span class="zh">推理：</span></strong>
+            <span class="en">Enhanced multi-hop inference</span>
+            <span class="zh">增强的多跳推理</span>
+          </li>
+          <li>⚡ <strong><span class="en">Speed:</span><span class="zh">速度：</span></strong>
+            <span class="en">~30ms latency on embed tasks</span>
+            <span class="zh">嵌入任务约30毫秒延迟</span>
+          </li>
+          <li>🔢 <strong><span class="en">Params:</span><span class="zh">参数量：</span></strong>
+            <span class="en">800M</span>
+            <span class="zh">8亿</span>
+          </li>
+          <li>💾 <strong><span class="en">Memory:</span><span class="zh">内存占用：</span></strong>
+            <span class="en">300 MB footprint</span>
+            <span class="zh">300 MB</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Use Cases -->
+  <section id="use-cases" class="py-16 px-4 bg-gray-800">
+    <h2 class="text-3xl font-semibold text-center mb-12">
+      <span class="en">Typical Use Cases</span>
+      <span class="zh">典型使用场景</span>
+    </h2>
+    <div class="max-w-4xl mx-auto grid sm:grid-cols-2 gap-10">
+      <div class="flex items-start space-x-4">
+        <div class="text-4xl">💬</div>
+        <div>
+          <h4 class="font-bold mb-1">
+            <span class="en">Chat Assistants</span>
+            <span class="zh">聊天助手</span>
+          </h4>
+          <p>
+            <span class="en">Real-time conversational AI with context awareness.</span>
+            <span class="zh">实时上下文感知对话AI。</span>
+          </p>
+        </div>
+      </div>
+      <div class="flex items-start space-x-4">
+        <div class="text-4xl">🖼️</div>
+        <div>
+          <h4 class="font-bold mb-1">
+            <span class="en">Image Understanding</span>
+            <span class="zh">图像理解</span>
+          </h4>
+          <p>
+            <span class="en">Captioning, tagging, or answering questions about images.</span>
+            <span class="zh">图像字幕、标记或问答。</span>
+          </p>
+        </div>
+      </div>
+      <div class="flex items-start space-x-4">
+        <div class="text-4xl">🔍</div>
+        <div>
+          <h4 class="font-bold mb-1">
+            <span class="en">Semantic Search</span>
+            <span class="zh">语义搜索</span>
+          </h4>
+          <p>
+            <span class="en">Embed-based retrieval for fast, accurate results.</span>
+            <span class="zh">基于嵌入的快速准确检索。</span>
+          </p>
+        </div>
+      </div>
+      <div class="flex items-start space-x-4">
+        <div class="text-4xl">🌐</div>
+        <div>
+          <h4 class="font-bold mb-1">
+            <span class="en">Real-time Translation</span>
+            <span class="zh">实时翻译</span>
+          </h4>
+          <p>
+            <span class="en">Low-latency multilingual conversion pipelines.</span>
+            <span class="zh">低延迟多语言转换管道。</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Benchmarks -->
+  <section id="benchmarks" class="py-16 px-4">
+    <h2 class="text-3xl font-semibold text-center mb-12">
+      <span class="en">Performance Benchmarks</span>
+      <span class="zh">性能基准</span>
+    </h2>
+    <div class="max-w-3xl mx-auto">
+      <div class="h-64 bg-gray-700 rounded-lg flex items-center justify-center text-gray-400">
+        <span class="en">[Chart: Latency vs. Model Size]</span>
+        <span class="zh">[图表：延迟 vs. 模型大小]</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Start -->
+  <section id="quickstart" class="py-16 px-4 bg-gray-800">
+    <h2 class="text-3xl font-semibold text-center mb-8">
+      <span class="en">Quick Start</span>
+      <span class="zh">快速上手</span>
+    </h2>
+    <div class="max-w-2xl mx-auto">
+      <pre class="bg-gray-900 p-4 rounded-lg overflow-auto"><code class="language-python">
+# pip install openai
+from openai import OpenAI
+
+client = OpenAI(api_key="YOUR_API_KEY")
+resp = client.chat.completions.create(
+  model="o4-mini",
+  messages=[{"role":"user","content":"Explain quantum computing in simple terms"}]
+)
+print(resp.choices[0].message.content)
+      </code></pre>
+      <button class="mt-4 px-6 py-2 bg-yellow-400 text-black rounded-lg hover:bg-yellow-500 transition">
+        <span class="en">Copy Code</span>
+        <span class="zh">复制代码</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section id="testimonials" class="py-16 px-4">
+    <h2 class="text-3xl font-semibold text-center mb-12">
+      <span class="en">What Our Users Say</span>
+      <span class="zh">用户评价</span>
+    </h2>
+    <div class="max-w-4xl mx-auto grid sm:grid-cols-3 gap-8">
+      <div class="bg-gray-800 p-6 rounded-xl">
+        <p class="italic mb-4">
+          <span class="en">“o4-mini cut our inference costs by 40% while boosting accuracy.”</span>
+          <span class="zh">“o4-mini 降低了 40% 的推理成本，同时提高了准确率。”</span>
+        </p>
+        <p class="font-bold">— AI Team Lead, TechCorp</p>
+      </div>
+      <div class="bg-gray-800 p-6 rounded-xl">
+        <p class="italic mb-4">
+          <span class="en">“Integration was seamless thanks to the tiny footprint.”</span>
+          <span class="zh">“由于占用极小，集成过程非常顺畅。”</span>
+        </p>
+        <p class="font-bold">— Dev Ops Engineer, DataWorks</p>
+      </div>
+      <div class="bg-gray-800 p-6 rounded-xl">
+        <p class="italic mb-4">
+          <span class="en">“Incredibly responsive for on-device applications.”</span>
+          <span class="zh">“在设备端应用中响应极其迅速。”</span>
+        </p>
+        <p class="font-bold">— Mobile Architect, Appify</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-8 bg-gray-900 text-center">
+    <p class="mb-4">
+      <span class="en">© 2025 OpenAI • <a href="https://platform.openai.com/docs" class="text-yellow-400 hover:underline">Developer Docs</a> • <a href="#contact" class="text-yellow-400 hover:underline">Contact Us</a></span>
+      <span class="zh">© 2025 OpenAI • <a href="https://platform.openai.com/docs" class="text-yellow-400 hover:underline">开发者文档</a> • <a href="#contact" class="text-yellow-400 hover:underline">联系我们</a></span>
+    </p>
+  </footer>
+
+  <script>
+    // 语言切换逻辑
+    function toggleLanguage(lang) {
+      const app = document.getElementById('app');
+      if (lang === 'en') {
+        app.classList.add('lang-en');
+        app.classList.remove('lang-zh');
+      } else {
+        app.classList.add('lang-zh');
+        app.classList.remove('lang-en');
+      }
+    }
+
+    // 初始化动画（保留原有 script）
+    const canvas = document.getElementById('heroCanvas');
+    if (canvas && canvas.getContext) {
+      const ctx = canvas.getContext('2d');
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      window.addEventListener('resize', resize);
+      resize();
+      let t = 0;
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        t += 0.01;
+        for (let i = 0; i < 100; i++) {
+          const x = Math.sin(t + i) * (canvas.width / 2) + canvas.width / 2;
+          const y = Math.cos(t + i * 1.3) * (canvas.height / 2) + canvas.height / 2;
+          ctx.fillStyle = `rgba(255,255,255,${0.05 + 0.05 * Math.sin(t + i)})`;
+          ctx.beginPath();
+          ctx.arc(x, y, 2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        requestAnimationFrame(draw);
+      }
+      draw();
+    }
+  </script>
+</body>
+</html>
