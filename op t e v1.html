@@ -3,321 +3,313 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>OpenAI o3 & o4‑mini Overview</title>
-  <!-- Tailwind CSS CDN -->
+  <title>OpenAI o3 & o4‑mini Showcase</title>
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* 基礎 reset */
-    * {
-      margin: 0; padding: 0; box-sizing: border-box;
-    }
-
-    /* 讓 html, body 及指定區塊佔滿畫面 */
-    html, body { height: 100%; }
-
-    /* 星空背景：兩層疊加產生閃爍、流動視覺效果 */
+    /* 星空流動 & 微光 */
     .stars, .twinkling {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      display: block;
-      pointer-events: none;
+      position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%; display: block;
+      pointer-events: none; z-index: -2;
     }
-    .stars {
-      background: url('https://raw.githubusercontent.com/lukehoban/es6features/master/assets/stars.png') repeat top center;
-      animation: moveStars 50s linear infinite;
-    }
-    .twinkling {
-      background: url('https://raw.githubusercontent.com/lukehoban/es6features/master/assets/twinkling.png') repeat top center;
-      animation: moveTwinkling 100s linear infinite;
-    }
-    @keyframes moveStars {
-      0%   { background-position: 0 0; }
-      100% { background-position: 10000px 0; }
-    }
-    @keyframes moveTwinkling {
-      0%   { background-position: 0 0; }
-      100% { background-position: -10000px 0; }
-    }
+    .stars { background: url('https://raw.githubusercontent.com/lukehoban/es6features/master/assets/stars.png') repeat; animation: moveStars 60s linear infinite; }
+    .twinkling { background: url('https://raw.githubusercontent.com/lukehoban/es6features/master/assets/twinkling.png') repeat; animation: moveTwinkle 120s linear infinite; }
+    @keyframes moveStars { 0%{background-position:0 0;}100%{background-position:10000px 0;} }
+    @keyframes moveTwinkle { 0%{background-position:0 0;}100%{background-position:-10000px 0;} }
 
-    /* 自訂一些段落動畫 (利用 keyframes) */
-    @keyframes fadeInUp {
-      0%   { opacity: 0; transform: translateY(20px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
-    .fade-in-up {
-      animation: fadeInUp 1s ease forwards;
-    }
-
-    /* 語言切換；同上一版做法 */
+    /* 多語切換 */
     .lang-en .zh { display: none; }
     .lang-zh .en { display: none; }
 
-    /* 視差背景範例：透過 background-attachment: fixed 產生 parallax */
-    .parallax-bg {
-      background-image: url('https://images.unsplash.com/photo-1507019409271-5966c3e73fd8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1976&q=80');
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-    }
+    /* 段落進場動畫 */
+    @keyframes fadeIn { from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);} }
+    .fade-in { animation: fadeIn 1s ease forwards; }
 
+    /* 側滑動畫 */
+    @keyframes slideInLeft { from{opacity:0;transform:translateX(-50px);} to{opacity:1;transform:translateX(0);} }
+    @keyframes slideInRight { from{opacity:0;transform:translateX(50px);} to{opacity:1;transform:translateX(0);} }
+    .slide-left { animation: slideInLeft 1s ease forwards; }
+    .slide-right { animation: slideInRight 1s ease forwards; }
+
+    /* SVG 切角 */
+    .skewed { 
+      clip-path: polygon(0 5%, 100% 0, 100% 95%, 0 100%);
+    }
   </style>
 </head>
-<body id="app" class="lang-en bg-gray-900 text-white leading-relaxed">
+<body id="app" class="lang-en bg-black text-white overflow-x-hidden">
 
-  <!-- 星空背景 (固定) -->
+  <!-- 星空背景 -->
   <div class="stars"></div>
   <div class="twinkling"></div>
 
-  <!-- 右上角語言切換按鈕 -->
-  <div class="fixed top-4 right-4 z-50 space-x-2">
-    <button onclick="toggleLanguage('en')"
-            class="px-3 py-1 bg-blue-600 rounded hover:bg-blue-700 transition">English</button>
-    <button onclick="toggleLanguage('zh')"
-            class="px-3 py-1 bg-green-600 rounded hover:bg-green-700 transition">中文</button>
+  <!-- 語言切換 -->
+  <div class="fixed top-4 right-4 z-50 flex space-x-2">
+    <button onclick="toggleLanguage('en')" class="px-3 py-1 bg-blue-600 rounded hover:bg-blue-700">English</button>
+    <button onclick="toggleLanguage('zh')" class="px-3 py-1 bg-green-600 rounded hover:bg-green-700">中文</button>
   </div>
 
-  <!-- Hero 區域 -->
-  <section class="relative flex flex-col items-center justify-center h-screen text-center px-4 overflow-hidden">
-    <!-- 半透明漸層背景覆蓋 -->
-    <div class="absolute inset-0 bg-gradient-to-r from-purple-700 via-blue-900 to-black opacity-60"></div>
+  <!-- Hero -->
+  <section class="relative h-screen flex flex-col items-center justify-center text-center">
+    <div class="absolute inset-0 bg-gradient-to-br from-purple-900 via-blue-900 to-black opacity-80"></div>
+    <h1 class="text-6xl font-extrabold mb-4 fade-in">
+      <span class="en">OpenAI o3 &amp; o4‑mini</span>
+      <span class="zh">OpenAI o3 與 o4‑mini</span>
+    </h1>
+    <p class="text-xl md:text-2xl max-w-2xl fade-in delay-200">
+      <span class="en">Lightweight inference reimagined—powerful reasoning meets blazing speed.</span>
+      <span class="zh">重新定義輕量推理——強大邏輯與極速響應的完美結合。</span>
+    </p>
+    <a href="#about" class="mt-8 inline-block bg-yellow-400 text-black px-6 py-3 rounded-lg hover:bg-yellow-500 transition slide-right delay-400">
+      <span class="en">Explore More</span>
+      <span class="zh">深入探索</span>
+    </a>
+  </section>
 
-    <div class="relative z-10 fade-in-up">
-      <h1 class="text-5xl md:text-6xl font-extrabold mb-4">
-        <span class="en">OpenAI o3 &amp; o4‑mini</span>
-        <span class="zh">OpenAI o3 與 o4‑mini</span>
-      </h1>
-      <p class="text-xl md:text-2xl mb-8 max-w-2xl mx-auto">
-        <span class="en">Lightweight inference with powerful reasoning and stunning multimodal support.</span>
-        <span class="zh">輕量化推理，強大邏輯與多模態支持的震撼體驗。</span>
+  <!-- About -->
+  <section id="about" class="py-20 px-6 skewed bg-gray-900">
+    <div class="max-w-4xl mx-auto space-y-6">
+      <h2 class="text-4xl font-bold text-center slide-left">
+        <span class="en">About the Models</span>
+        <span class="zh">模型介紹</span>
+      </h2>
+      <p class="text-lg fade-in slide-right">
+        <span class="en">
+          At only 1 billion parameters, <strong>o3</strong> delivers robust logical inference while maintaining a compact footprint—ideal for on‑device assistants and rapid prototyping. Building on that foundation, <strong>o4‑mini</strong> (800 M parameters) pushes the boundary further with multi‑hop reasoning and sub‑30 ms response times, perfect for real‑time applications.
+        </span>
+        <span class="zh">
+          僅以 10 億參數實現強大邏輯推理的 <strong>o3</strong>，保持極小體積—適合設備端助理與快速原型。基於此，<strong>o4‑mini</strong>（8 億參數）提供多跳推理與 30 毫秒以下響應，專為實時場景打造。
+        </span>
       </p>
-      <a href="#features" class="inline-block bg-yellow-400 text-black font-semibold px-6 py-3 rounded-lg hover:bg-yellow-500 transition">
-        <span class="en">Discover More</span>
-        <span class="zh">深入了解</span>
-      </a>
     </div>
-    <!-- 英文：floating shapes; 中文：保留一致 -->
-    <canvas id="heroCanvas" class="absolute inset-0 z-0"></canvas>
   </section>
 
-  <!-- 視差背景示範區塊 -->
-  <section class="parallax-bg h-48 w-full flex items-center justify-center">
-    <h2 class="text-3xl font-bold drop-shadow-lg">
-      <span class="en">Feel the Parallax</span>
-      <span class="zh">視差特效預覽</span>
-    </h2>
-  </section>
-
-  <!-- Features Comparison -->
-  <section id="features" class="py-16 px-4 bg-gray-900">
-    <h2 class="text-3xl font-bold text-center mb-12 fade-in-up">
-      <span class="en">Core Feature Comparison</span>
-      <span class="zh">核心特性對比</span>
-    </h2>
-    <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 fade-in-up">
-      <!-- o3 Card -->
-      <div class="bg-gray-800 p-6 rounded-2xl shadow-lg hover:shadow-2xl transition transform hover:scale-105">
-        <h3 class="text-2xl font-bold mb-4">
-          <span class="en">Model o3</span>
-          <span class="zh">模型 o3</span>
-        </h3>
-        <ul class="space-y-2">
-          <li>🧠 <strong><span class="en">Reasoning:</span><span class="zh">推理：</span></strong>
-            <span class="en">Advanced logical inference</span>
-            <span class="zh">高階邏輯推理</span>
+  <!-- Key Features -->
+  <section class="py-20 px-6 bg-gradient-to-br from-gray-800 to-gray-900">
+    <div class="max-w-5xl mx-auto grid lg:grid-cols-2 gap-12">
+      <div class="slide-left space-y-6">
+        <h2 class="text-4xl font-bold">
+          <span class="en">Key Features</span>
+          <span class="zh">主要特性</span>
+        </h2>
+        <ul class="space-y-4 text-lg">
+          <li class="flex items-start">
+            <span class="text-2xl mr-3">🧠</span>
+            <div>
+              <strong class="en">Advanced Reasoning:</strong><strong class="zh">高階推理：</strong>
+              <span class="en">o3 one‑step inference; o4‑mini multi‑hop logic.</span>
+              <span class="zh">o3 單步推理；o4‑mini 多跳邏輯。</span>
+            </div>
           </li>
-          <li>⚡ <strong><span class="en">Speed:</span><span class="zh">速度：</span></strong>
-            <span class="en">~50ms latency on embed tasks</span>
-            <span class="zh">嵌入任務約50ms延遲</span>
+          <li class="flex items-start">
+            <span class="text-2xl mr-3">⚡</span>
+            <div>
+              <strong class="en">Blazing Speed:</strong><strong class="zh">極速響應：</strong>
+              <span class="en">~50ms for o3; ~30ms for o4‑mini.</span>
+              <span class="zh">o3 約 50ms；o4‑mini 約 30ms。</span>
+            </div>
           </li>
-          <li>🔢 <strong><span class="en">Params:</span><span class="zh">參數量：</span></strong>
-            <span class="en">1B</span>
-            <span class="zh">10億</span>
+          <li class="flex items-start">
+            <span class="text-2xl mr-3">💾</span>
+            <div>
+              <strong class="en">Compact Footprint:</strong><strong class="zh">輕量體積：</strong>
+              <span class="en">500 MB (o3); 300 MB (o4‑mini).</span>
+              <span class="zh">500 MB (o3)；300 MB (o4‑mini)。</span>
+            </div>
           </li>
-          <li>💾 <strong><span class="en">Memory:</span><span class="zh">內存占用：</span></strong>
-            <span class="en">500 MB footprint</span>
-            <span class="zh">500 MB</span>
+          <li class="flex items-start">
+            <span class="text-2xl mr-3">🖼️</span>
+            <div>
+              <strong class="en">Multimodal Support:</strong><strong class="zh">多模態支持：</strong>
+              <span class="en">Text & image inputs in one API call.</span>
+              <span class="zh">文字與圖像同時請求。</span>
+            </div>
           </li>
         </ul>
       </div>
-      <!-- o4-mini Card -->
-      <div class="bg-gray-800 p-6 rounded-2xl shadow-lg hover:shadow-2xl transition transform hover:scale-105">
-        <h3 class="text-2xl font-bold mb-4">
-          <span class="en">Model o4‑mini</span>
-          <span class="zh">模型 o4‑mini</span>
-        </h3>
-        <ul class="space-y-2">
-          <li>🧠 <strong><span class="en">Reasoning:</span><span class="zh">推理：</span></strong>
-            <span class="en">Enhanced multi-hop inference</span>
-            <span class="zh">增強的多跳推理</span>
-          </li>
-          <li>⚡ <strong><span class="en">Speed:</span><span class="zh">速度：</span></strong>
-            <span class="en">~30ms latency on embed tasks</span>
-            <span class="zh">嵌入任務約30ms延遲</span>
-          </li>
-          <li>🔢 <strong><span class="en">Params:</span><span class="zh">參數量：</span></strong>
-            <span class="en">800M</span>
-            <span class="zh">8億</span>
-          </li>
-          <li>💾 <strong><span class="en">Memory:</span><span class="zh">內存占用：</span></strong>
-            <span class="en">300 MB footprint</span>
-            <span class="zh">300 MB</span>
-          </li>
-        </ul>
+      <div class="slide-right hidden lg:block">
+        <img src="https://images.unsplash.com/photo-1557682250-0b3d5f41e7b4?auto=format&fit=crop&w=800&q=80"
+             alt="AI visualization" class="rounded-xl shadow-2xl border-4 border-purple-600"/>
       </div>
     </div>
   </section>
 
-  <!-- Use Cases -->
-  <section id="use-cases" class="py-16 px-4 bg-gradient-to-br from-gray-900 to-gray-800 fade-in-up">
-    <h2 class="text-3xl font-bold text-center mb-12">
-      <span class="en">Typical Use Cases</span>
-      <span class="zh">典型應用場景</span>
-    </h2>
-    <div class="max-w-4xl mx-auto grid sm:grid-cols-2 gap-10">
-      <div class="flex items-start space-x-4">
-        <div class="text-4xl">💬</div>
-        <div>
-          <h4 class="font-bold mb-1">
-            <span class="en">Chat Assistants</span>
-            <span class="zh">聊天助理</span>
-          </h4>
-          <p>
-            <span class="en">Real-time conversational AI with context awareness.</span>
-            <span class="zh">具上下文感知的即時對話 AI。</span>
-          </p>
+  <!-- Performance -->
+  <section class="py-20 px-6 skewed bg-gray-900">
+    <div class="max-w-3xl mx-auto text-center space-y-6">
+      <h2 class="text-4xl font-bold slide-left">
+        <span class="en">Performance at a Glance</span>
+        <span class="zh">性能概覽</span>
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-lg slide-right">
+        <div class="bg-gray-800 p-6 rounded-xl shadow-lg">
+          <h3 class="font-semibold mb-2"><span class="en">o3</span><span class="zh">o3 模型</span></h3>
+          <p>✅ <span class="en">Params:</span><span class="zh">參數量：</span>1 B</p>
+          <p>✅ <span class="en">Latency:</span><span class="zh">延遲：</span>50 ms</p>
+          <p>✅ <span class="en">Memory:</span><span class="zh">內存：</span>500 MB</p>
         </div>
-      </div>
-      <div class="flex items-start space-x-4">
-        <div class="text-4xl">🖼️</div>
-        <div>
-          <h4 class="font-bold mb-1">
-            <span class="en">Image Understanding</span>
-            <span class="zh">圖像理解</span>
-          </h4>
-          <p>
-            <span class="en">Captioning, tagging, or answering questions about images.</span>
-            <span class="zh">為圖像提供字幕、標註或答疑。</span>
-          </p>
-        </div>
-      </div>
-      <div class="flex items-start space-x-4">
-        <div class="text-4xl">🔍</div>
-        <div>
-          <h4 class="font-bold mb-1">
-            <span class="en">Semantic Search</span>
-            <span class="zh">語義搜索</span>
-          </h4>
-          <p>
-            <span class="en">Embed-based retrieval for fast, accurate results.</span>
-            <span class="zh">基於嵌入的快速且精準檢索。</span>
-          </p>
-        </div>
-      </div>
-      <div class="flex items-start space-x-4">
-        <div class="text-4xl">🌐</div>
-        <div>
-          <h4 class="font-bold mb-1">
-            <span class="en">Real-time Translation</span>
-            <span class="zh">即時翻譯</span>
-          </h4>
-          <p>
-            <span class="en">Low-latency multilingual conversion pipelines.</span>
-            <span class="zh">低延遲、多語系轉換管線。</span>
-          </p>
+        <div class="bg-gray-800 p-6 rounded-xl shadow-lg">
+          <h3 class="font-semibold mb-2"><span class="en">o4‑mini</span><span class="zh">o4‑mini 模型</span></h3>
+          <p>✅ <span class="en">Params:</span><span class="zh">參數量：</span>800 M</p>
+          <p>✅ <span class="en">Latency:</span><span class="zh">延遲：</span>30 ms</p>
+          <p>✅ <span class="en">Memory:</span><span class="zh">內存：</span>300 MB</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Benchmarks -->
-  <section id="benchmarks" class="py-16 px-4 bg-gray-900">
-    <h2 class="text-3xl font-bold text-center mb-12 fade-in-up">
-      <span class="en">Performance Benchmarks</span>
-      <span class="zh">性能基準</span>
-    </h2>
-    <div class="max-w-3xl mx-auto fade-in-up">
-      <div class="h-64 bg-gray-700 rounded-lg flex items-center justify-center text-gray-400">
-        <span class="en">[Chart: Latency vs. Model Size]</span>
-        <span class="zh">[圖表：延遲 vs. 模型大小]</span>
+  <!-- Applications -->
+  <section class="py-20 px-6 bg-gradient-to-br from-gray-800 to-gray-900">
+    <div class="max-w-5xl mx-auto space-y-8">
+      <h2 class="text-4xl font-bold text-center fade-in">
+        <span class="en">Real‑World Applications</span>
+        <span class="zh">實際應用案例</span>
+      </h2>
+      <ul class="grid sm:grid-cols-2 gap-6 text-lg slide-left">
+        <li class="bg-gray-800 p-6 rounded-xl hover:bg-gray-700 transition">
+          <h3 class="font-semibold mb-2">💬 <span class="en">Conversational Agents</span><span class="zh">聊天助手</span></h3>
+          <p class="en">Deploy o4‑mini on mobile for <strong>&lt;100 ms</strong> chat replies.</p>
+          <p class="zh">行動端部署 o4‑mini，實現 100ms 內回應。</p>
+        </li>
+        <li class="bg-gray-800 p-6 rounded-xl hover:bg-gray-700 transition">
+          <h3 class="font-semibold mb-2">🖼️ <span class="en">Image Captioning</span><span class="zh">圖像字幕</span></h3>
+          <p class="en">Auto‑caption user photos with vision + text reasoning.</p>
+          <p class="zh">結合視覺與文本推理，自動生成照片字幕。</p>
+        </li>
+        <li class="bg-gray-800 p-6 rounded-xl hover:bg-gray-700 transition">
+          <h3 class="font-semibold mb-2">🔍 <span class="en">Semantic Search</span><span class="zh">語義檢索</span></h3>
+          <p class="en">Instant retrieval from large document sets.</p>
+          <p class="zh">瞬時檢索海量文檔。</p>
+        </li>
+        <li class="bg-gray-800 p-6 rounded-xl hover:bg-gray-700 transition">
+          <h3 class="font-semibold mb-2">🌐 <span class="en">On‑Device Translation</span><span class="zh">設備端翻譯</span></h3>
+          <p class="en">Private, low‑latency multilingual chat locally.</p>
+          <p class="zh">本地推理，多語對話低延遲且私密。</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Customer Stories -->
+  <section class="py-20 px-6 skewed bg-gray-900">
+    <div class="max-w-4xl mx-auto space-y-8 text-center">
+      <h2 class="text-4xl font-bold slide-right">
+        <span class="en">Customer Stories</span>
+        <span class="zh">客戶案例</span>
+      </h2>
+      <div class="space-y-6 slide-left">
+        <blockquote class="italic bg-gray-800 p-6 rounded-xl">
+          <p>“<span class="en">By switching to o4‑mini, we cut inference costs by 40% and accelerated our on‑device AI features.</span><span class="zh">採用 o4‑mini 後，我們降低了 40% 推理成本，並加速了設備端 AI 功能。</span>”</p>
+          <footer class="mt-2 font-bold">— TechCorp</footer>
+        </blockquote>
+        <blockquote class="italic bg-gray-800 p-6 rounded-xl">
+          <p>“<span class="en">o3’s compact size let us roll out prototypes in days, not weeks.</span><span class="zh">o3 的輕量體積讓我們在數天內完成原型，而非數週。</span>”</p>
+          <footer class="mt-2 font-bold">— DataWorks</footer>
+        </blockquote>
       </div>
     </div>
   </section>
 
   <!-- Quick Start -->
-  <section id="quickstart" class="py-16 px-4 bg-gradient-to-br from-gray-800 to-black fade-in-up">
-    <h2 class="text-3xl font-bold text-center mb-8">
-      <span class="en">Quick Start</span>
-      <span class="zh">快速上手</span>
-    </h2>
-    <div class="max-w-2xl mx-auto">
-      <pre class="bg-gray-900 p-4 rounded-lg overflow-auto"><code class="language-python">
-# pip install openai
-from openai import OpenAI
+  <section class="py-20 px-6 bg-gradient-to-br from-gray-800 to-black">
+    <div class="max-w-3xl mx-auto space-y-6 text-center fade-in">
+      <h2 class="text-4xl font-bold">
+        <span class="en">Quick Start Guide</span>
+        <span class="zh">快速上手指南</span>
+      </h2>
+      <pre class="bg-gray-900 p-6 rounded-xl text-left text-sm overflow-auto">
+pip install openai
 
+from openai import OpenAI
 client = OpenAI(api_key="YOUR_API_KEY")
+
 resp = client.chat.completions.create(
   model="o4-mini",
-  messages=[{"role":"user","content":"Explain quantum computing in simple terms"}]
+  messages=[{"role":"user","content":"Explain blockchain simply"}]
 )
 print(resp.choices[0].message.content)
-      </code></pre>
-      <button class="mt-4 px-6 py-2 bg-yellow-400 text-black rounded-lg hover:bg-yellow-500 transition">
-        <span class="en">Copy Code</span>
-        <span class="zh">複製程式碼</span>
-      </button>
+      </pre>
     </div>
   </section>
 
-  <!-- Testimonials -->
-  <section id="testimonials" class="py-16 px-4 bg-gray-900">
-    <h2 class="text-3xl font-bold text-center mb-12 fade-in-up">
-      <span class="en">What Our Users Say</span>
-      <span class="zh">用戶回饋</span>
+  <!-- Pricing -->
+  <section class="py-20 px-6 skewed bg-gray-900">
+    <div class="max-w-4xl mx-auto text-center slide-right">
+      <h2 class="text-4xl font-bold mb-6">
+        <span class="en">Pricing & Plans</span>
+        <span class="zh">定價方案</span>
+      </h2>
+      <table class="w-full text-left text-lg bg-gray-800 rounded-xl overflow-hidden shadow-lg">
+        <thead class="bg-purple-700">
+          <tr>
+            <th class="px-4 py-2">Plan</th>
+            <th class="px-4 py-2">o3 Usage</th>
+            <th class="px-4 py-2">o4‑mini Usage</th>
+            <th class="px-4 py-2">Monthly</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-gray-700">
+            <td class="px-4 py-2">Free</td>
+            <td class="px-4 py-2">100 K tokens</td>
+            <td class="px-4 py-2">—</td>
+            <td class="px-4 py-2">$0</td>
+          </tr>
+          <tr class="border-b border-gray-700">
+            <td class="px-4 py-2">Starter</td>
+            <td class="px-4 py-2">1 M tokens</td>
+            <td class="px-4 py-2">500 K tokens</td>
+            <td class="px-4 py-2">$20</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-2">Pro</td>
+            <td class="px-4 py-2">5 M tokens</td>
+            <td class="px-4 py-2">3 M tokens</td>
+            <td class="px-4 py-2">$75</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="py-20 px-6 bg-gradient-to-br from-gray-800 to-gray-900">
+    <div class="max-w-3xl mx-auto space-y-8 slide-left">
+      <h2 class="text-4xl font-bold text-center">
+        <span class="en">FAQ</span>
+        <span class="zh">常見問題</span>
+      </h2>
+      <details class="bg-gray-800 p-4 rounded-lg">
+        <summary class="font-semibold cursor-pointer">Can I switch models mid‑session?</summary>
+        <p class="mt-2 en">Yes, just set `"model": "o3"` or `"o4-mini"` per call.</p>
+        <p class="mt-2 zh">可以，只需在呼叫時指定 `"model": "o3"` 或 `"o4-mini"`。</p>
+      </details>
+      <details class="bg-gray-800 p-4 rounded-lg">
+        <summary class="font-semibold cursor-pointer">How do I fine‑tune?</summary>
+        <p class="mt-2 en">Fine‑tuning support coming soon via OpenAI CLI.</p>
+        <p class="mt-2 zh">微調功能即將通過 CLI 支援，敬請期待。</p>
+      </details>
+      <details class="bg-gray-800 p-4 rounded-lg">
+        <summary class="font-semibold cursor-pointer">What hardware do I need?</summary>
+        <p class="mt-2 en">Any device with ≥2 GB RAM and CPU/GPU support.</p>
+        <p class="mt-2 zh">建議 2 GB 及以上 RAM，並配備 CPU/GPU。</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <footer class="py-12 px-6 bg-black text-center fade-in">
+    <h2 class="text-3xl font-semibold mb-4">
+      <span class="en">Contact & Support</span>
+      <span class="zh">聯絡與支援</span>
     </h2>
-    <div class="max-w-4xl mx-auto grid sm:grid-cols-3 gap-8 fade-in-up">
-      <div class="bg-gray-800 p-6 rounded-xl transform hover:scale-105 transition">
-        <p class="italic mb-4">
-          <span class="en">“o4-mini cut our inference costs by 40% while boosting accuracy.”</span>
-          <span class="zh">「o4-mini 將我們的推理成本降低了 40%，同時提升了準確度。」</span>
-        </p>
-        <p class="font-bold">— AI Team Lead, TechCorp</p>
-      </div>
-      <div class="bg-gray-800 p-6 rounded-xl transform hover:scale-105 transition">
-        <p class="italic mb-4">
-          <span class="en">“Integration was seamless thanks to the tiny footprint.”</span>
-          <span class="zh">「由於佔用極小，整合過程非常順暢。」</span>
-        </p>
-        <p class="font-bold">— Dev Ops Engineer, DataWorks</p>
-      </div>
-      <div class="bg-gray-800 p-6 rounded-xl transform hover:scale-105 transition">
-        <p class="italic mb-4">
-          <span class="en">“Incredibly responsive for on-device applications.”</span>
-          <span class="zh">「在設備端應用中反應速度極快。」</span>
-        </p>
-        <p class="font-bold">— Mobile Architect, Appify</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="py-8 bg-black text-center fade-in-up">
-    <p class="mb-4">
-      <span class="en">
-        © 2025 OpenAI •
-        <a href="https://platform.openai.com/docs" class="text-yellow-400 hover:underline">Developer Docs</a> •
-        <a href="#contact" class="text-yellow-400 hover:underline">Contact Us</a>
-      </span>
-      <span class="zh">
-        © 2025 OpenAI •
-        <a href="https://platform.openai.com/docs" class="text-yellow-400 hover:underline">開發者文件</a> •
-        <a href="#contact" class="text-yellow-400 hover:underline">聯絡我們</a>
-      </span>
-    </p>
+    <p class="mb-2 en">Email: support@openai.com • Docs: <a href="https://platform.openai.com/docs" class="text-yellow-400 hover:underline">platform.openai.com/docs</a></p>
+    <p class="mb-2 zh">電郵：support@openai.com • 文件：<a href="https://platform.openai.com/docs" class="text-yellow-400 hover:underline">platform.openai.com/docs</a></p>
+    <p class="mt-4 text-sm text-gray-500">© 2025 OpenAI</p>
   </footer>
 
   <script>
-    // 多語切換邏輯
     function toggleLanguage(lang) {
       const app = document.getElementById('app');
       if (lang === 'en') {
@@ -327,34 +319,6 @@ print(resp.choices[0].message.content)
         app.classList.add('lang-zh');
         app.classList.remove('lang-en');
       }
-    }
-
-    // 英雄區背景動畫 (與前一版本類似，可自行替換更酷炫素材)
-    const canvas = document.getElementById('heroCanvas');
-    if (canvas && canvas.getContext) {
-      const ctx = canvas.getContext('2d');
-      function resize() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-      }
-      window.addEventListener('resize', resize);
-      resize();
-
-      let t = 0;
-      function draw() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        t += 0.01;
-        for (let i = 0; i < 100; i++) {
-          const x = Math.sin(t + i) * (canvas.width / 2) + canvas.width / 2;
-          const y = Math.cos(t + i * 1.3) * (canvas.height / 2) + canvas.height / 2;
-          ctx.fillStyle = `rgba(255,255,255,${0.05 + 0.05 * Math.sin(t + i)})`;
-          ctx.beginPath();
-          ctx.arc(x, y, 2, 0, Math.PI * 2);
-          ctx.fill();
-        }
-        requestAnimationFrame(draw);
-      }
-      draw();
     }
   </script>
 </body>
