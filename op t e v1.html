@@ -7,50 +7,116 @@
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* 语言切换样式 */
+    /* 基礎 reset */
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+    }
+
+    /* 讓 html, body 及指定區塊佔滿畫面 */
+    html, body { height: 100%; }
+
+    /* 星空背景：兩層疊加產生閃爍、流動視覺效果 */
+    .stars, .twinkling {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      display: block;
+      pointer-events: none;
+    }
+    .stars {
+      background: url('https://raw.githubusercontent.com/lukehoban/es6features/master/assets/stars.png') repeat top center;
+      animation: moveStars 50s linear infinite;
+    }
+    .twinkling {
+      background: url('https://raw.githubusercontent.com/lukehoban/es6features/master/assets/twinkling.png') repeat top center;
+      animation: moveTwinkling 100s linear infinite;
+    }
+    @keyframes moveStars {
+      0%   { background-position: 0 0; }
+      100% { background-position: 10000px 0; }
+    }
+    @keyframes moveTwinkling {
+      0%   { background-position: 0 0; }
+      100% { background-position: -10000px 0; }
+    }
+
+    /* 自訂一些段落動畫 (利用 keyframes) */
+    @keyframes fadeInUp {
+      0%   { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in-up {
+      animation: fadeInUp 1s ease forwards;
+    }
+
+    /* 語言切換；同上一版做法 */
     .lang-en .zh { display: none; }
     .lang-zh .en { display: none; }
+
+    /* 視差背景範例：透過 background-attachment: fixed 產生 parallax */
+    .parallax-bg {
+      background-image: url('https://images.unsplash.com/photo-1507019409271-5966c3e73fd8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1976&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+
   </style>
 </head>
 <body id="app" class="lang-en bg-gray-900 text-white leading-relaxed">
 
-  <!-- 语言切换按钮 -->
-  <div class="fixed top-4 right-4 space-x-2 z-50">
+  <!-- 星空背景 (固定) -->
+  <div class="stars"></div>
+  <div class="twinkling"></div>
+
+  <!-- 右上角語言切換按鈕 -->
+  <div class="fixed top-4 right-4 z-50 space-x-2">
     <button onclick="toggleLanguage('en')"
             class="px-3 py-1 bg-blue-600 rounded hover:bg-blue-700 transition">English</button>
     <button onclick="toggleLanguage('zh')"
             class="px-3 py-1 bg-green-600 rounded hover:bg-green-700 transition">中文</button>
   </div>
 
-  <!-- Hero Section -->
-  <section class="relative h-screen flex items-center justify-center text-center overflow-hidden">
-    <div class="absolute inset-0 bg-gradient-to-br from-purple-800 via-blue-900 to-black opacity-70"></div>
-    <div class="z-10 px-4">
-      <h1 class="text-5xl font-bold mb-4">
+  <!-- Hero 區域 -->
+  <section class="relative flex flex-col items-center justify-center h-screen text-center px-4 overflow-hidden">
+    <!-- 半透明漸層背景覆蓋 -->
+    <div class="absolute inset-0 bg-gradient-to-r from-purple-700 via-blue-900 to-black opacity-60"></div>
+
+    <div class="relative z-10 fade-in-up">
+      <h1 class="text-5xl md:text-6xl font-extrabold mb-4">
         <span class="en">OpenAI o3 &amp; o4‑mini</span>
-        <span class="zh">OpenAI o3 与 o4‑mini</span>
+        <span class="zh">OpenAI o3 與 o4‑mini</span>
       </h1>
-      <p class="text-xl mb-8">
-        <span class="en">Lightweight inference reimagined with powerful reasoning and multimodal support.</span>
-        <span class="zh">轻量级推理，强大推理与多模态支持的全新演绎。</span>
+      <p class="text-xl md:text-2xl mb-8 max-w-2xl mx-auto">
+        <span class="en">Lightweight inference with powerful reasoning and stunning multimodal support.</span>
+        <span class="zh">輕量化推理，強大邏輯與多模態支持的震撼體驗。</span>
       </p>
       <a href="#features" class="inline-block bg-yellow-400 text-black font-semibold px-6 py-3 rounded-lg hover:bg-yellow-500 transition">
-        <span class="en">Learn More</span>
-        <span class="zh">了解详情</span>
+        <span class="en">Discover More</span>
+        <span class="zh">深入了解</span>
       </a>
     </div>
-    <canvas id="heroCanvas" class="absolute inset-0"></canvas>
+    <!-- 英文：floating shapes; 中文：保留一致 -->
+    <canvas id="heroCanvas" class="absolute inset-0 z-0"></canvas>
+  </section>
+
+  <!-- 視差背景示範區塊 -->
+  <section class="parallax-bg h-48 w-full flex items-center justify-center">
+    <h2 class="text-3xl font-bold drop-shadow-lg">
+      <span class="en">Feel the Parallax</span>
+      <span class="zh">視差特效預覽</span>
+    </h2>
   </section>
 
   <!-- Features Comparison -->
-  <section id="features" class="py-16 px-4">
-    <h2 class="text-3xl font-semibold text-center mb-12">
+  <section id="features" class="py-16 px-4 bg-gray-900">
+    <h2 class="text-3xl font-bold text-center mb-12 fade-in-up">
       <span class="en">Core Feature Comparison</span>
-      <span class="zh">核心特性对比</span>
+      <span class="zh">核心特性對比</span>
     </h2>
-    <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 fade-in-up">
       <!-- o3 Card -->
-      <div class="bg-gray-800 p-6 rounded-2xl shadow-lg hover:shadow-2xl transition">
+      <div class="bg-gray-800 p-6 rounded-2xl shadow-lg hover:shadow-2xl transition transform hover:scale-105">
         <h3 class="text-2xl font-bold mb-4">
           <span class="en">Model o3</span>
           <span class="zh">模型 o3</span>
@@ -58,24 +124,24 @@
         <ul class="space-y-2">
           <li>🧠 <strong><span class="en">Reasoning:</span><span class="zh">推理：</span></strong>
             <span class="en">Advanced logical inference</span>
-            <span class="zh">高级逻辑推理</span>
+            <span class="zh">高階邏輯推理</span>
           </li>
           <li>⚡ <strong><span class="en">Speed:</span><span class="zh">速度：</span></strong>
             <span class="en">~50ms latency on embed tasks</span>
-            <span class="zh">嵌入任务约50毫秒延迟</span>
+            <span class="zh">嵌入任務約50ms延遲</span>
           </li>
-          <li>🔢 <strong><span class="en">Params:</span><span class="zh">参数量：</span></strong>
+          <li>🔢 <strong><span class="en">Params:</span><span class="zh">參數量：</span></strong>
             <span class="en">1B</span>
-            <span class="zh">10亿</span>
+            <span class="zh">10億</span>
           </li>
-          <li>💾 <strong><span class="en">Memory:</span><span class="zh">内存占用：</span></strong>
-            <span class="en">500 MB footprint</span>
-            <span class="zh">500 MB</span>
+          <li>💾 <strong><span class="en">Memory:</span><span class="zh">內存占用：</span></strong>
+            <span class="en">500 MB footprint</span>
+            <span class="zh">500 MB</span>
           </li>
         </ul>
       </div>
       <!-- o4-mini Card -->
-      <div class="bg-gray-800 p-6 rounded-2xl shadow-lg hover:shadow-2xl transition">
+      <div class="bg-gray-800 p-6 rounded-2xl shadow-lg hover:shadow-2xl transition transform hover:scale-105">
         <h3 class="text-2xl font-bold mb-4">
           <span class="en">Model o4‑mini</span>
           <span class="zh">模型 o4‑mini</span>
@@ -83,19 +149,19 @@
         <ul class="space-y-2">
           <li>🧠 <strong><span class="en">Reasoning:</span><span class="zh">推理：</span></strong>
             <span class="en">Enhanced multi-hop inference</span>
-            <span class="zh">增强的多跳推理</span>
+            <span class="zh">增強的多跳推理</span>
           </li>
           <li>⚡ <strong><span class="en">Speed:</span><span class="zh">速度：</span></strong>
             <span class="en">~30ms latency on embed tasks</span>
-            <span class="zh">嵌入任务约30毫秒延迟</span>
+            <span class="zh">嵌入任務約30ms延遲</span>
           </li>
-          <li>🔢 <strong><span class="en">Params:</span><span class="zh">参数量：</span></strong>
+          <li>🔢 <strong><span class="en">Params:</span><span class="zh">參數量：</span></strong>
             <span class="en">800M</span>
-            <span class="zh">8亿</span>
+            <span class="zh">8億</span>
           </li>
-          <li>💾 <strong><span class="en">Memory:</span><span class="zh">内存占用：</span></strong>
-            <span class="en">300 MB footprint</span>
-            <span class="zh">300 MB</span>
+          <li>💾 <strong><span class="en">Memory:</span><span class="zh">內存占用：</span></strong>
+            <span class="en">300 MB footprint</span>
+            <span class="zh">300 MB</span>
           </li>
         </ul>
       </div>
@@ -103,10 +169,10 @@
   </section>
 
   <!-- Use Cases -->
-  <section id="use-cases" class="py-16 px-4 bg-gray-800">
-    <h2 class="text-3xl font-semibold text-center mb-12">
+  <section id="use-cases" class="py-16 px-4 bg-gradient-to-br from-gray-900 to-gray-800 fade-in-up">
+    <h2 class="text-3xl font-bold text-center mb-12">
       <span class="en">Typical Use Cases</span>
-      <span class="zh">典型使用场景</span>
+      <span class="zh">典型應用場景</span>
     </h2>
     <div class="max-w-4xl mx-auto grid sm:grid-cols-2 gap-10">
       <div class="flex items-start space-x-4">
@@ -114,11 +180,11 @@
         <div>
           <h4 class="font-bold mb-1">
             <span class="en">Chat Assistants</span>
-            <span class="zh">聊天助手</span>
+            <span class="zh">聊天助理</span>
           </h4>
           <p>
             <span class="en">Real-time conversational AI with context awareness.</span>
-            <span class="zh">实时上下文感知对话AI。</span>
+            <span class="zh">具上下文感知的即時對話 AI。</span>
           </p>
         </div>
       </div>
@@ -127,11 +193,11 @@
         <div>
           <h4 class="font-bold mb-1">
             <span class="en">Image Understanding</span>
-            <span class="zh">图像理解</span>
+            <span class="zh">圖像理解</span>
           </h4>
           <p>
             <span class="en">Captioning, tagging, or answering questions about images.</span>
-            <span class="zh">图像字幕、标记或问答。</span>
+            <span class="zh">為圖像提供字幕、標註或答疑。</span>
           </p>
         </div>
       </div>
@@ -140,11 +206,11 @@
         <div>
           <h4 class="font-bold mb-1">
             <span class="en">Semantic Search</span>
-            <span class="zh">语义搜索</span>
+            <span class="zh">語義搜索</span>
           </h4>
           <p>
             <span class="en">Embed-based retrieval for fast, accurate results.</span>
-            <span class="zh">基于嵌入的快速准确检索。</span>
+            <span class="zh">基於嵌入的快速且精準檢索。</span>
           </p>
         </div>
       </div>
@@ -153,11 +219,11 @@
         <div>
           <h4 class="font-bold mb-1">
             <span class="en">Real-time Translation</span>
-            <span class="zh">实时翻译</span>
+            <span class="zh">即時翻譯</span>
           </h4>
           <p>
             <span class="en">Low-latency multilingual conversion pipelines.</span>
-            <span class="zh">低延迟多语言转换管道。</span>
+            <span class="zh">低延遲、多語系轉換管線。</span>
           </p>
         </div>
       </div>
@@ -165,22 +231,22 @@
   </section>
 
   <!-- Benchmarks -->
-  <section id="benchmarks" class="py-16 px-4">
-    <h2 class="text-3xl font-semibold text-center mb-12">
+  <section id="benchmarks" class="py-16 px-4 bg-gray-900">
+    <h2 class="text-3xl font-bold text-center mb-12 fade-in-up">
       <span class="en">Performance Benchmarks</span>
-      <span class="zh">性能基准</span>
+      <span class="zh">性能基準</span>
     </h2>
-    <div class="max-w-3xl mx-auto">
+    <div class="max-w-3xl mx-auto fade-in-up">
       <div class="h-64 bg-gray-700 rounded-lg flex items-center justify-center text-gray-400">
         <span class="en">[Chart: Latency vs. Model Size]</span>
-        <span class="zh">[图表：延迟 vs. 模型大小]</span>
+        <span class="zh">[圖表：延遲 vs. 模型大小]</span>
       </div>
     </div>
   </section>
 
   <!-- Quick Start -->
-  <section id="quickstart" class="py-16 px-4 bg-gray-800">
-    <h2 class="text-3xl font-semibold text-center mb-8">
+  <section id="quickstart" class="py-16 px-4 bg-gradient-to-br from-gray-800 to-black fade-in-up">
+    <h2 class="text-3xl font-bold text-center mb-8">
       <span class="en">Quick Start</span>
       <span class="zh">快速上手</span>
     </h2>
@@ -198,36 +264,36 @@ print(resp.choices[0].message.content)
       </code></pre>
       <button class="mt-4 px-6 py-2 bg-yellow-400 text-black rounded-lg hover:bg-yellow-500 transition">
         <span class="en">Copy Code</span>
-        <span class="zh">复制代码</span>
+        <span class="zh">複製程式碼</span>
       </button>
     </div>
   </section>
 
   <!-- Testimonials -->
-  <section id="testimonials" class="py-16 px-4">
-    <h2 class="text-3xl font-semibold text-center mb-12">
+  <section id="testimonials" class="py-16 px-4 bg-gray-900">
+    <h2 class="text-3xl font-bold text-center mb-12 fade-in-up">
       <span class="en">What Our Users Say</span>
-      <span class="zh">用户评价</span>
+      <span class="zh">用戶回饋</span>
     </h2>
-    <div class="max-w-4xl mx-auto grid sm:grid-cols-3 gap-8">
-      <div class="bg-gray-800 p-6 rounded-xl">
+    <div class="max-w-4xl mx-auto grid sm:grid-cols-3 gap-8 fade-in-up">
+      <div class="bg-gray-800 p-6 rounded-xl transform hover:scale-105 transition">
         <p class="italic mb-4">
           <span class="en">“o4-mini cut our inference costs by 40% while boosting accuracy.”</span>
-          <span class="zh">“o4-mini 降低了 40% 的推理成本，同时提高了准确率。”</span>
+          <span class="zh">「o4-mini 將我們的推理成本降低了 40%，同時提升了準確度。」</span>
         </p>
         <p class="font-bold">— AI Team Lead, TechCorp</p>
       </div>
-      <div class="bg-gray-800 p-6 rounded-xl">
+      <div class="bg-gray-800 p-6 rounded-xl transform hover:scale-105 transition">
         <p class="italic mb-4">
           <span class="en">“Integration was seamless thanks to the tiny footprint.”</span>
-          <span class="zh">“由于占用极小，集成过程非常顺畅。”</span>
+          <span class="zh">「由於佔用極小，整合過程非常順暢。」</span>
         </p>
         <p class="font-bold">— Dev Ops Engineer, DataWorks</p>
       </div>
-      <div class="bg-gray-800 p-6 rounded-xl">
+      <div class="bg-gray-800 p-6 rounded-xl transform hover:scale-105 transition">
         <p class="italic mb-4">
           <span class="en">“Incredibly responsive for on-device applications.”</span>
-          <span class="zh">“在设备端应用中响应极其迅速。”</span>
+          <span class="zh">「在設備端應用中反應速度極快。」</span>
         </p>
         <p class="font-bold">— Mobile Architect, Appify</p>
       </div>
@@ -235,15 +301,23 @@ print(resp.choices[0].message.content)
   </section>
 
   <!-- Footer -->
-  <footer class="py-8 bg-gray-900 text-center">
+  <footer class="py-8 bg-black text-center fade-in-up">
     <p class="mb-4">
-      <span class="en">© 2025 OpenAI • <a href="https://platform.openai.com/docs" class="text-yellow-400 hover:underline">Developer Docs</a> • <a href="#contact" class="text-yellow-400 hover:underline">Contact Us</a></span>
-      <span class="zh">© 2025 OpenAI • <a href="https://platform.openai.com/docs" class="text-yellow-400 hover:underline">开发者文档</a> • <a href="#contact" class="text-yellow-400 hover:underline">联系我们</a></span>
+      <span class="en">
+        © 2025 OpenAI •
+        <a href="https://platform.openai.com/docs" class="text-yellow-400 hover:underline">Developer Docs</a> •
+        <a href="#contact" class="text-yellow-400 hover:underline">Contact Us</a>
+      </span>
+      <span class="zh">
+        © 2025 OpenAI •
+        <a href="https://platform.openai.com/docs" class="text-yellow-400 hover:underline">開發者文件</a> •
+        <a href="#contact" class="text-yellow-400 hover:underline">聯絡我們</a>
+      </span>
     </p>
   </footer>
 
   <script>
-    // 语言切换逻辑
+    // 多語切換邏輯
     function toggleLanguage(lang) {
       const app = document.getElementById('app');
       if (lang === 'en') {
@@ -255,7 +329,7 @@ print(resp.choices[0].message.content)
       }
     }
 
-    // 初始化动画（保留原有 script）
+    // 英雄區背景動畫 (與前一版本類似，可自行替換更酷炫素材)
     const canvas = document.getElementById('heroCanvas');
     if (canvas && canvas.getContext) {
       const ctx = canvas.getContext('2d');
@@ -265,6 +339,7 @@ print(resp.choices[0].message.content)
       }
       window.addEventListener('resize', resize);
       resize();
+
       let t = 0;
       function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
